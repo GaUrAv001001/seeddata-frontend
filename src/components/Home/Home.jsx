@@ -82,7 +82,7 @@ export default function TransactionList() {
 
       <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
         {/* Search and Month Filter */}
-        <div className="mb-4 flex items-center">
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center">
           <input
             type="text"
             placeholder="Search..."
@@ -93,7 +93,7 @@ export default function TransactionList() {
           <select
             value={month}
             onChange={handleMonthChange}
-            className="border border-gray-300 p-2 rounded-md ml-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="ml-0 mt-2 sm:mt-0 border border-gray-300 p-2 rounded-md sm:ml-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="january">January</option>
             <option value="february">February</option>
