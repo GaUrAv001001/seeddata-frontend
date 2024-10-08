@@ -7,6 +7,7 @@ export default function Statistics() {
   const [month, setMonth] = useState("");
   const [statistics, setStatistics] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const months = Array.from({ length: 12 }, (_, index) => {
     return {
@@ -25,6 +26,7 @@ export default function Statistics() {
 
   const fetchStatistics = async (selectedMonth) => {
     try {
+      setLoading(true);
       const response = await axios.get(`${API_URL}/statistics`, {
         params: { month: selectedMonth },
       });
@@ -34,6 +36,8 @@ export default function Statistics() {
       console.error("Error fetching statistics:", error);
       setError("Failed to fetch statistics");
       setStatistics(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,7 +51,6 @@ export default function Statistics() {
     <div className="p-4 bg-gray-50 rounded-md shadow-md">
       <h1 className="text-2xl font-bold mb-4 text-center">Sales Statistics</h1>
 
-      {/* --------Select Month---------- */}
       <div className="mb-4">
         <label
           htmlFor="month"
@@ -70,10 +73,14 @@ export default function Statistics() {
         </select>
       </div>
 
-      {/* ---------Display Error------------- */}
+      {loading && (
+        <div className="flex justify-center items-center py-10">
+          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-600"></div>
+        </div>
+      )}
+
       {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
 
-      {/* -------------Display Statistics------------- */}
       {statistics && (
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-center">

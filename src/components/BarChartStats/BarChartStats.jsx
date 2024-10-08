@@ -25,6 +25,7 @@ export default function BarChartStats() {
   const [chartData, setChartData] = useState(null);
   const [month, setMonth] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); 
 
   const months = Array.from({ length: 12 }, (_, index) => {
     return {
@@ -43,6 +44,7 @@ export default function BarChartStats() {
   }, []);
 
   const fetchChartData = async (selectedMonth) => {
+    setLoading(true); 
     try {
       const response = await axios.get(`${API_URL}/barchartdata`, {
         params: { month: selectedMonth },
@@ -65,10 +67,12 @@ export default function BarChartStats() {
       console.error("Error fetching bar chart data:", error);
       setError("Failed to fetch data for bar chart");
       setChartData(null);
+    } finally {
+      setLoading(false); 
     }
   };
 
-  // handleMonthChange
+  // Handle month change
   const handleMonthChange = (event) => {
     const selectedMonth = event.target.value;
     setMonth(selectedMonth);
@@ -104,32 +108,39 @@ export default function BarChartStats() {
 
       {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
 
-      {/* ------- Chart data ----- */}
-      {chartData && (
-        <div className="mt-4">
-          <Bar
-            data={chartData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false, // This helps the chart to adjust its height and width dynamically
-              plugins: {
-                legend: {
-                  position: "top",
-                },
-                title: {
-                  display: true,
-                  text: `Sales Count for ${month}`,
-                },
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                },
-              },
-            }}
-            height={400} // Height can be adjusted for better responsiveness
-          />
+      {/* Loader */}
+      {loading ? (
+        <div className="flex justify-center items-center py-10">
+          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-600"></div>
         </div>
+      ) : (
+        // ------- Chart data -----
+        chartData && (
+          <div className="mt-4">
+            <Bar
+              data={chartData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "top",
+                  },
+                  title: {
+                    display: true,
+                    text: `Sales Count for ${month}`,
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              }}
+              height={400}
+            />
+          </div>
+        )
       )}
     </div>
   );

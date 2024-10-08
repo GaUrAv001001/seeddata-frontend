@@ -9,7 +9,6 @@ export default function PieChartStats() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // List of months
   const months = [
     { label: "January", value: "January" },
     { label: "February", value: "February" },
@@ -75,7 +74,12 @@ export default function PieChartStats() {
   };
 
   if (loading) {
-    return <div className="text-center">Loading...</div>;
+    return (
+        <div className="flex justify-center items-center py-10">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-600">
+        </div>
+      </div>
+    );
   }
 
   if (error) {
