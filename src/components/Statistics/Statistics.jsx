@@ -1,35 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { FaShoppingCart, FaRegFrown, FaMoneyBillWave } from 'react-icons/fa'; // Importing icons
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FaShoppingCart, FaRegFrown, FaMoneyBillWave } from "react-icons/fa"; // Importing icons
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Statistics() {
-  const [month, setMonth] = useState('');
+  const [month, setMonth] = useState("");
   const [statistics, setStatistics] = useState(null);
   const [error, setError] = useState(null);
 
   const months = Array.from({ length: 12 }, (_, index) => {
     return {
-      label: new Date(0, index).toLocaleString('default', { month: 'long' }),
-      value: new Date(0, index).toLocaleString('default', { month: 'long' }),
+      label: new Date(0, index).toLocaleString("default", { month: "long" }),
+      value: new Date(0, index).toLocaleString("default", { month: "long" }),
     };
   });
 
   useEffect(() => {
-    const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+    const currentMonth = new Date().toLocaleString("default", {
+      month: "long",
+    });
     setMonth(currentMonth);
     fetchStatistics(currentMonth);
   }, []);
 
   const fetchStatistics = async (selectedMonth) => {
     try {
-      const response = await axios.get('http://localhost:8000/api/v2/transaction/statistics', {
+      const response = await axios.get(`${API_URL}/statistics`, {
         params: { month: selectedMonth },
       });
       setStatistics(response.data.data);
       setError(null);
     } catch (error) {
-      console.error('Error fetching statistics:', error);
-      setError('Failed to fetch statistics');
+      console.error("Error fetching statistics:", error);
+      setError("Failed to fetch statistics");
       setStatistics(null);
     }
   };
@@ -46,7 +49,12 @@ export default function Statistics() {
 
       {/* --------Select Month---------- */}
       <div className="mb-4">
-        <label htmlFor="month" className="block text-sm font-medium text-gray-700">Select a Month</label>
+        <label
+          htmlFor="month"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Select a Month
+        </label>
         <select
           id="month"
           name="month"
@@ -71,22 +79,30 @@ export default function Statistics() {
           <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-center">
             <FaShoppingCart className="text-green-500 text-3xl mr-2" />
             <div>
-              <h3 className="text-xl font-semibold text-center">Total Sold Items</h3>
+              <h3 className="text-xl font-semibold text-center">
+                Total Sold Items
+              </h3>
               <p className="text-center">{statistics.totalSoldItems}</p>
             </div>
           </div>
           <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-center">
             <FaRegFrown className="text-red-500 text-3xl mr-2" />
             <div>
-              <h3 className="text-xl font-semibold text-center">Total Not Sold Items</h3>
+              <h3 className="text-xl font-semibold text-center">
+                Total Not Sold Items
+              </h3>
               <p className="text-center">{statistics.totalNotSoldItems}</p>
             </div>
           </div>
           <div className="bg-white rounded-lg p-4 shadow-md flex items-center justify-center">
             <FaMoneyBillWave className="text-blue-500 text-3xl mr-2" />
             <div>
-              <h3 className="text-xl font-semibold text-center">Total Sales Amount</h3>
-              <p className="text-center">₹{statistics.totalSalesAmount.toFixed(2)}</p>
+              <h3 className="text-xl font-semibold text-center">
+                Total Sales Amount
+              </h3>
+              <p className="text-center">
+                ₹{statistics.totalSalesAmount.toFixed(2)}
+              </p>
             </div>
           </div>
         </div>

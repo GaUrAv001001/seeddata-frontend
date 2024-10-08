@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Bar } from 'react-chartjs-2';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,56 +9,66 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+const API_URL = import.meta.env.VITE_API_URL;
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default function BarChartStats() {
   const [chartData, setChartData] = useState(null);
-  const [month, setMonth] = useState('');
+  const [month, setMonth] = useState("");
   const [error, setError] = useState(null);
 
   const months = Array.from({ length: 12 }, (_, index) => {
     return {
-      label: new Date(0, index).toLocaleString('default', { month: 'long' }),
-      value: new Date(0, index).toLocaleString('default', { month: 'long' }),
+      label: new Date(0, index).toLocaleString("default", { month: "long" }),
+      value: new Date(0, index).toLocaleString("default", { month: "long" }),
     };
   });
 
   // Fetch the bar chart data when the month is selected or on component mount
   useEffect(() => {
-    const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+    const currentMonth = new Date().toLocaleString("default", {
+      month: "long",
+    });
     setMonth(currentMonth);
     fetchChartData(currentMonth);
   }, []);
 
   const fetchChartData = async (selectedMonth) => {
     try {
-      const response = await axios.get('http://localhost:8000/api/v2/transaction/barchartdata', {
+      const response = await axios.get(`${API_URL}/barchartdata`, {
         params: { month: selectedMonth },
       });
       const data = response.data.data;
       setChartData({
-        labels: data.map(item => item.range), 
+        labels: data.map((item) => item.range),
         datasets: [
           {
-            label: 'Sales Count',
-            data: data.map(item => item.count),
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            label: "Sales Count",
+            data: data.map((item) => item.count),
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 1)",
             borderWidth: 1,
           },
         ],
       });
       setError(null);
     } catch (error) {
-      console.error('Error fetching bar chart data:', error);
-      setError('Failed to fetch data for bar chart');
+      console.error("Error fetching bar chart data:", error);
+      setError("Failed to fetch data for bar chart");
       setChartData(null);
     }
   };
 
-  // handleMonthChange 
+  // handleMonthChange
   const handleMonthChange = (event) => {
     const selectedMonth = event.target.value;
     setMonth(selectedMonth);
@@ -71,7 +81,12 @@ export default function BarChartStats() {
 
       {/* ------- Select month ----- */}
       <div className="mb-4">
-        <label htmlFor="month" className="block text-sm font-medium text-gray-700">Select a Month</label>
+        <label
+          htmlFor="month"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Select a Month
+        </label>
         <select
           id="month"
           name="month"
@@ -96,9 +111,10 @@ export default function BarChartStats() {
             data={chartData}
             options={{
               responsive: true,
+              maintainAspectRatio: false, // This helps the chart to adjust its height and width dynamically
               plugins: {
                 legend: {
-                  position: 'top',
+                  position: "top",
                 },
                 title: {
                   display: true,
@@ -111,6 +127,7 @@ export default function BarChartStats() {
                 },
               },
             }}
+            height={400} // Height can be adjusted for better responsiveness
           />
         </div>
       )}
