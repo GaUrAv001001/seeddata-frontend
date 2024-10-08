@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import rox from '../../assets/rox.jpeg'
 
 export default function Footer() {
   return (
@@ -9,7 +10,8 @@ export default function Footer() {
           <div className="mb-6 md:mb-0">
             <Link to="/" className="flex items-center">
               <img
-                src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
+                // src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
+                src={rox}
                 className="mr-3 h-16"
                 alt="Logo"
               />
@@ -22,12 +24,12 @@ export default function Footer() {
               </h2>
               <ul className="text-gray-500 font-medium">
                 <li className="mb-4">
-                  <Link to="/" className="hover:underline">
+                  <Link to="#" className="hover:underline">
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about" className="hover:underline">
+                  <Link to="#" className="hover:underline">
                     About
                   </Link>
                 </li>
@@ -40,7 +42,7 @@ export default function Footer() {
               <ul className="text-gray-500 font-medium">
                 <li className="mb-4">
                   <a
-                    href="https://github.com/hiteshchoudhary"
+                    href="https://github.com/GaUrAv001001"
                     className="hover:underline"
                     target="_blank"
                     rel="noreferrer"
@@ -83,6 +85,7 @@ export default function Footer() {
             </a>
             . All Rights Reserved.
           </span>
+          <div className="flex mt-4 space-x-3 text-red-600">This website is for Assessment by <span className="text-blue-600 mx-2 underline"><Link to='https://roxiler.com/' target="_blank">Roxiler System</Link></span></div>
           <div className="flex mt-4 space-x-5 sm:justify-center sm:mt-0">
             <Link to="#" className="text-gray-500 hover:text-gray-900">
               <svg
